@@ -34,6 +34,10 @@ manifest:
       remote: zmkfirmware
       groups:
         - hal
+    - name: mcuboot
+      revision: 346f7374ff4467e40b5594658f8ac67a5e9813c9
+      path: bootloader/mcuboot
+      remote: zephyrproject-rtos
     - name: lvgl
       revision: f1db87ee98f1810328a8419572fa42a3b5f352ae
       path: modules/lib/gui/lvgl
