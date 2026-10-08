@@ -1,0 +1,154 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/dts-v1/;
+#include <mem.h>
+#include <st/wb/stm32wb55.dtsi>
+#include <st/wb/stm32wb55ceux-pinctrl.dtsi>
+#include <dt-bindings/gpio/gpio.h>
+
+&sram0 {
+	/* SRAM1 only; SRAM2a/SRAM2b are reserved for CPU2 (BLE stack/IPCC). */
+	reg = <0x20000000 DT_SIZE_K(192)>;
+};
+
+/ {
+	model = "Aardvark 68";
+	compatible = "wim4rk,aardvark-68";
+
+	chosen {
+		zephyr,sram = &sram0;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &code_partition;
+		zephyr,boot-mode = &retention0;
+	};
+
+	kscan0: kscan {
+		compatible = "zmk,kscan-gpio-matrix";
+		diode-direction = "col2row";
+		row-gpios
+			= <&gpiob 5 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R0 */
+			, <&gpiob 6 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R1 */
+			, <&gpiob 7 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R2 */
+			, <&gpiob 8 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R3 */
+			, <&gpiob 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>  /* R4 */
+			;
+		col-gpios
+			= <&gpioa 0  GPIO_ACTIVE_HIGH>  /* C00 */
+			, <&gpioa 1  GPIO_ACTIVE_HIGH>  /* C01 */
+			, <&gpioa 2  GPIO_ACTIVE_HIGH>  /* C02 */
+			, <&gpioa 3  GPIO_ACTIVE_HIGH>  /* C03 */
+			, <&gpioa 4  GPIO_ACTIVE_HIGH>  /* C04 */
+			, <&gpioa 5  GPIO_ACTIVE_HIGH>  /* C05 */
+			, <&gpioa 6  GPIO_ACTIVE_HIGH>  /* C06 */
+			, <&gpioa 7  GPIO_ACTIVE_HIGH>  /* C07 */
+			, <&gpioa 8  GPIO_ACTIVE_HIGH>  /* C08 */
+			, <&gpioa 9  GPIO_ACTIVE_HIGH>  /* C09 */
+			, <&gpioa 10 GPIO_ACTIVE_HIGH>  /* C10 */
+			, <&gpioa 15 GPIO_ACTIVE_HIGH>  /* C11 */
+			, <&gpiob 0  GPIO_ACTIVE_HIGH>  /* C12 */
+			, <&gpiob 1  GPIO_ACTIVE_HIGH>  /* C13 */
+			, <&gpiob 2  GPIO_ACTIVE_HIGH>  /* C14 */
+			, <&gpiob 4  GPIO_ACTIVE_HIGH>  /* C15 */
+			;
+	};
+};
+
+&clk_lse {
+	status = "okay";
+};
+
+&clk_hse {
+	status = "okay";
+};
+
+&clk_hsi48 {
+	status = "okay";
+};
+
+&clk48 {
+	/* Explicit, rather than relying on the CLK48SEL reset default. */
+	clocks = <&rcc STM32_SRC_HSI48 CLK48_SEL(0)>;
+	status = "okay";
+};
+
+&rcc {
+	clocks = <&clk_hse>;
+	clock-frequency = <DT_FREQ_M(32)>;
+	cpu1-prescaler = <1>;
+	cpu2-prescaler = <1>;
+	ahb4-prescaler = <1>;
+	apb1-prescaler = <1>;
+	apb2-prescaler = <1>;
+};
+
+zephyr_udc0: &usb {
+	status = "okay";
+	pinctrl-0 = <&usb_dm_pa11 &usb_dp_pa12>;
+	pinctrl-names = "default";
+};
+
+&rng {
+	status = "okay";
+};
+
+/*
+ * &bootloader: the boot mode is kept in an RTC backup register across the
+ * warm reset, then Zephyr jumps to the ROM USB DFU bootloader. This is the
+ * only way to reflash once the case is closed (SWD is not reachable).
+ */
+&rtc {
+	clocks = <&rcc STM32_CLOCK(APB1, 10U)>,
+		 <&rcc STM32_SRC_LSE RTC_SEL(1)>;
+	status = "okay";
+};
+
+&bbram {
+	status = "okay";
+
+	retainedmem0: retainedmem {
+		compatible = "zephyr,retained-bbram";
+		status = "okay";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		retention0: retention@0 {
+			compatible = "zephyr,retention";
+			status = "okay";
+			reg = <0x0 0x1>;
+		};
+	};
+};
+
+&flash0 {
+	/*
+	 * Physical flash is 512K (0x80000). The top of flash is reserved for the
+	 * CPU2 wireless coprocessor (FUS + BLE stack), flashed separately via
+	 * STM32CubeProgrammer. CPU2 must run stm32wb5x_BLE_HCILayer_fw.bin (not
+	 * the "full"/"light" stacks, which reject standard HCI commands that
+	 * Zephyr's host needs), matching hal_stm32's STM32CubeWB version. With
+	 * that installed, SFSA sits at 0x0806C000; this 368K limit is a margin
+	 * below it and must never be raised past SFSA.
+	 *
+	 * No bootloader: the app runs from 0x08000000 and is flashed over SWD.
+	 */
+	reg = <0x08000000 DT_SIZE_K(368)>;
+
+	partitions {
+		compatible = "fixed-partitions";
+		#address-cells = <1>;
+		#size-cells = <1>;
+
+		code_partition: partition@0 {
+			label = "image-0";
+			reg = <0x00000000 DT_SIZE_K(352)>;
+		};
+		storage_partition: partition@58000 {
+			label = "storage";
+			reg = <0x00058000 DT_SIZE_K(16)>;
+		};
+	};
+};

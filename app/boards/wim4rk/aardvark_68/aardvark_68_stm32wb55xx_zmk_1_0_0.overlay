@@ -1,0 +1,12 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Deliberately minimal: this overlay is auto-applied to every image built
+ * against this board+revision, including MCUboot's own build under
+ * sysbuild. ZMK-specific additions (matrix-transform, physical-layout,
+ * the zmk,kscan/zmk,physical-layout chosen entries) live in the keymap
+ * file instead, since MCUboot's build doesn't have ZMK's dt-bindings
+ * include path and fails if it tries to pull them in from here.
+ */

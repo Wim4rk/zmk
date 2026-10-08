@@ -1,0 +1,139 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Positional bindings: keys are bound to the US-ANSI HID position they
+ * occupy (e.g. the physical "Å" key is bound as LBKT). Set the host OS
+ * keyboard layout to Swedish so it translates positions to the printed
+ * legends. This is the standard ZMK approach for non-US layouts.
+ *
+ * This board has a Swedish ISO layout: ISO Enter (tall, 1.25x2u) and a
+ * split left shift (1.25u LSHFT + a separate NUBS key before Z) - both
+ * confirmed directly from the PCB (switch footprints + net trace), not
+ * assumed. The small corner glyphs seen on the reference keycaps (e.g.
+ * "@" over 2, "$" over 4) are the standard Swedish AltGr layer, produced
+ * automatically by the OS from the physical RALT key (bound below) plus
+ * a Swedish OS keyboard layout - no separate ZMK layer is needed for
+ * those, which is why symbol_layer below stays a plain passthrough.
+ *
+ * Layers 0/2/3 (base/functions/adjust) are transcribed from the
+ * reference images in "/home/olov/Dropbox/Referens/Keymaps BT65/",
+ * which are the stock Polarity Works BT65 keymaps (not bespoke to this
+ * board). Note BT65 runs an nRF52 BLE controller; this board runs
+ * STM32WB55's own controller (CPU2 + FUS) - an entirely different BLE
+ * stack, so any bonding-stability issues seen on the BT65 don't
+ * necessarily carry over, and fixes for one aren't guaranteed to apply
+ * to the other. CONFIG_BT_MAX_PAIRED is set to 3 (not the usual 5) in
+ * the board defconfig to keep bonded-profile state simpler.
+ *
+ * RGB/backlight bindings from the reference (BT65 has RGB underglow +
+ * backlight hardware) are bound to &none here since Aardvark 68 rev
+ * 1.0.0 has no such hardware - the sole onboard LED (D48) is the
+ * MCP73831 charge indicator, not MCU-controlled. Good candidates to
+ * revisit once the planned PE4 BLE-status LED lands in the next
+ * revision.
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/matrix_transform.h>
+#include "aardvark_68-layout.dtsi"
+
+&aardvark_68_layout {
+	transform = <&default_transform>;
+};
+
+/ {
+	chosen {
+		zmk,kscan = &kscan0;
+		zmk,physical-layout = &aardvark_68_layout;
+	};
+
+	default_transform: keymap_transform_0 {
+		compatible = "zmk,matrix-transform";
+		columns = <16>;
+		rows = <5>;
+
+		map = <
+RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)  RC(0,4)  RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)  RC(0,9)  RC(0,10) RC(0,11) RC(0,12)          RC(0,14) RC(0,15)
+RC(1,0)           RC(1,2)  RC(1,3)  RC(1,4)  RC(1,5)  RC(1,6)  RC(1,7)  RC(1,8)  RC(1,9)  RC(1,10) RC(1,11) RC(1,12) RC(1,13)          RC(1,15)
+RC(2,0)           RC(2,2)  RC(2,3)  RC(2,4)  RC(2,5)  RC(2,6)  RC(2,7)  RC(2,8)  RC(2,9)  RC(2,10) RC(2,11) RC(2,12) RC(2,13) RC(2,14) RC(2,15)
+RC(3,0)  RC(3,1)  RC(3,2)  RC(3,3)  RC(3,4)  RC(3,5)  RC(3,6)  RC(3,7)  RC(3,8)  RC(3,9)  RC(3,10) RC(3,11)          RC(3,13) RC(3,14) RC(3,15)
+RC(4,0)  RC(4,1)           RC(4,3)                    RC(4,6)                            RC(4,10) RC(4,11) RC(4,12) RC(4,13) RC(4,14) RC(4,15)
+		>;
+	};
+
+	keymap {
+		compatible = "zmk,keymap";
+
+		default_layer {
+			// -----------------------------------------------------------------------------------------------------
+			// | ESC |  1  |  2  |  3  |  4  |  5  |  6  |  7  |  8  |  9  |  0  |  -  |  =  |   BSPC   | DEL |
+			// |  TAB  |  Q  |  W  |  E  |  R  |  T  |  Y  |  U  |  I  |  O  |  P  |  [  |  ]  | INS |
+			// | CAPS/LT1 |  A  |  S  |  D  |  F  |  G  |  H  |  J  |  K  |  L  |  ;  |  '  | NUHS |   ENTER   | HOME |
+			// |  SHIFT  | NUBS |  Z  |  X  |  C  |  V  |  B  |  N  |  M  |  ,  |  .  |  /  |   SHIFT   | UP | END |
+			// | CTRL | WIN | ALT |            SPACE            | ALT | FN | CTRL | LEFT | DOWN | RIGHT |
+			// -----------------------------------------------------------------------------------------------------
+			bindings = <
+&kp ESC     &kp N1   &kp N2  &kp N3  &kp N4  &kp N5  &kp N6  &kp N7  &kp N8  &kp N9   &kp N0    &kp MINUS &kp EQUAL          &kp BSPC   &kp DEL
+&kp TAB     &kp Q    &kp W   &kp E   &kp R   &kp T   &kp Y   &kp U   &kp I   &kp O    &kp P     &kp LBKT  &kp RBKT                      &kp INS
+&lt 1 CAPS  &kp A    &kp S   &kp D   &kp F   &kp G   &kp H   &kp J   &kp K   &kp L    &kp SEMI  &kp SQT   &kp NUHS  &kp RET             &kp HOME
+&kp LSHFT   &kp NUBS &kp Z   &kp X   &kp C   &kp V   &kp B   &kp N   &kp M   &kp COMMA &kp DOT  &kp FSLH  &kp RSHFT           &kp UP     &kp END
+&kp LCTRL   &kp LGUI &kp LALT                &kp SPACE                       &kp RALT  &mo 2     &kp RCTRL &kp LEFT           &kp DOWN   &kp RIGHT
+			>;
+		};
+
+		symbol_layer {
+			// AltGr symbols are automatic (OS + RALT), see header comment - nothing to bind here.
+			bindings = <
+&trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans          &trans &trans
+&trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans                 &trans
+&trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans          &trans
+&trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans          &trans &trans
+&trans &trans &trans                &trans                       &trans &trans &trans &trans        &trans &trans
+			>;
+		};
+
+		function_layer {
+			// -------------------------------------------------------------------------------------------------------
+			// | GRV | F1 | F2 | F3 | F4 | F5 | F6 | F7 | F8 | F9 | F10 | F11 | F12 | K_POWER | BRI_UP |
+			// | trans .......................................................................... | BRI_DN |
+			// | trans .......................................................................... | trans  | trans |
+			// | trans .......................................................................... | VOL_UP | trans |
+			// | (backlight - N/A) | (backlight - N/A) | (backlight - N/A) | PLAY_PAUSE | trans | trans | trans | PREV | VOL_DN | NEXT |
+			// -------------------------------------------------------------------------------------------------------
+			bindings = <
+&kp GRAVE &kp F1 &kp F2 &kp F3 &kp F4 &kp F5 &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12          &kp K_POWER   &kp C_BRI_UP
+&trans    &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans                          &kp C_BRI_DN
+&trans    &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans                  &trans
+&trans    &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans &trans                 &kp C_VOL_UP &trans
+&none     &none  &none                &kp C_PLAY_PAUSE                    &trans &trans  &trans &kp C_PREV   &kp C_VOL_DN &kp C_NEXT
+			>;
+		};
+
+		adjust_layer {
+			// ---------------------------------------------------------------------------------------------------------
+			// | BT_CLR | BT0 | BT1 | BT2 | USB/BT | -- | F6 | F7 | F8 | F9 | F10 | F11 | F12 | KB_RESET | BRI_UP |
+			// (only 3 BT profiles configured - see CONFIG_BT_MAX_PAIRED in the board defconfig)
+			// ---------------------------------------------------------------------------------------------------------
+			bindings = <
+&bt BT_CLR &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &out OUT_TOG  &none        &kp F6 &kp F7 &kp F8 &kp F9 &kp F10 &kp F11 &kp F12          &sys_reset    &kp C_BRI_UP
+&trans     &trans       &trans       &trans       &trans       &trans       &trans &trans &trans &trans &trans  &trans  &trans                         &kp C_BRI_DN
+&trans     &trans       &trans       &trans       &trans       &trans       &trans &trans &trans &trans &trans  &trans  &trans   &bootloader             &trans
+&trans     &trans       &trans       &trans       &trans       &trans       &trans &trans &trans &trans &trans  &trans  &trans                &kp C_VOL_UP &trans
+&none      &none        &none                     &kp C_PLAY_PAUSE                        &trans &trans  &trans &none          &kp C_VOL_DN &none
+			>;
+		};
+	};
+
+	conditional_layers {
+		compatible = "zmk,conditional-layers";
+		tri_layer {
+			if-layers = <1 2>;
+			then-layer = <3>;
+		};
+	};
+};

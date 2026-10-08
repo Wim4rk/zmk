@@ -1,0 +1,27 @@
+# SPDX-License-Identifier: MIT
+
+# Enable MPU
+CONFIG_ARM_MPU=y
+
+# Enable HW stack protection
+CONFIG_HW_STACK_PROTECTION=y
+
+# Enable GPIO
+CONFIG_GPIO=y
+
+CONFIG_USE_DT_CODE_PARTITION=y
+
+CONFIG_MPU_ALLOW_FLASH_WRITE=y
+CONFIG_NVS=y
+CONFIG_FLASH=y
+CONFIG_FLASH_PAGE_LAYOUT=y
+CONFIG_FLASH_MAP=y
+
+
+# Fewer stored BLE profiles (3 instead of the default 5): less bonding
+# state to keep consistent in NVS, in the interest of connection stability.
+# Set here rather than in Kconfig.defconfig, because ZMK's own defaults are
+# read first and would win. Harmless "unsatisfied dependency" warnings when
+# CONFIG_ZMK_BLE=n.
+CONFIG_BT_MAX_PAIRED=3
+CONFIG_BT_MAX_CONN=3

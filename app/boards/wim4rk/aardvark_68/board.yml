@@ -1,0 +1,12 @@
+boards:
+  - name: aardvark_68
+    vendor: wim4rk
+    socs:
+      - name: stm32wb55xx
+        variants:
+          - name: zmk
+    revision:
+      format: major.minor.patch
+      default: 1.0.0
+      revisions:
+        - name: 1.0.0

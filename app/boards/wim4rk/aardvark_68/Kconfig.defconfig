@@ -1,0 +1,20 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config ZMK_KEYBOARD_NAME
+	default "Aardvark 68" if BOARD_AARDVARK_68
+
+if BOARD_AARDVARK_68
+
+config BT_STM32_IPM
+	default y
+	depends on BT
+
+# Let a host that has forgotten its bond re-pair with the profile it already
+# owns. Without this, the keyboard keeps the stale key and refuses the new
+# pairing (SMP "Authentication Requirements"), and the profile has to be
+# cleared manually with BT_CLR.
+config ZMK_BLE_EXPERIMENTAL_SEC
+	default y if ZMK_BLE
+
+endif # BOARD_AARDVARK_68

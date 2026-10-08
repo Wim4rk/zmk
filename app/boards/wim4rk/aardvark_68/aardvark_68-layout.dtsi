@@ -1,0 +1,90 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ * Physical layout generated from the board's own KiCad placement data
+ * (keyboard_stm32-all-pos.csv + PCB net trace for row/col wiring).
+ * Units are centi-key-units (100 = 1.00u); origin is top-left.
+ */
+
+#include <physical_layouts.dtsi>
+
+/ {
+	aardvark_68_layout: aardvark_68_layout {
+		compatible = "zmk,physical-layout";
+		display-name = "Aardvark 68";
+
+		keys  // w   h    x    y  rot  rx  ry
+			= <&key_physical_attrs 100 100    0    0 0 0 0>  /* K1 ESC */
+			, <&key_physical_attrs 100 100  100    0 0 0 0>  /* K6 #1 */
+			, <&key_physical_attrs 100 100  200    0 0 0 0>  /* K9 #2 */
+			, <&key_physical_attrs 100 100  300    0 0 0 0>  /* K13 #3 */
+			, <&key_physical_attrs 100 100  400    0 0 0 0>  /* K18 #4 */
+			, <&key_physical_attrs 100 100  500    0 0 0 0>  /* K22 #5 */
+			, <&key_physical_attrs 100 100  600    0 0 0 0>  /* K26 #6 */
+			, <&key_physical_attrs 100 100  700    0 0 0 0>  /* K31 #7 */
+			, <&key_physical_attrs 100 100  800    0 0 0 0>  /* K35 #8 */
+			, <&key_physical_attrs 100 100  900    0 0 0 0>  /* K39 #9 */
+			, <&key_physical_attrs 100 100 1000    0 0 0 0>  /* K43 #0 */
+			, <&key_physical_attrs 100 100 1100    0 0 0 0>  /* K48 + */
+			, <&key_physical_attrs 100 100 1200    0 0 0 0>  /* K53 ´ / ` */
+			, <&key_physical_attrs 200 100 1300    0 0 0 0>  /* K61 BSPC */
+			, <&key_physical_attrs 100 100 1500    0 0 0 0>  /* K65 DEL */
+			, <&key_physical_attrs 150 100    0  100 0 0 0>  /* K2 TAB */
+			, <&key_physical_attrs 100 100  150  100 0 0 0>  /* K10 Q */
+			, <&key_physical_attrs 100 100  250  100 0 0 0>  /* K14 W */
+			, <&key_physical_attrs 100 100  350  100 0 0 0>  /* K19 E */
+			, <&key_physical_attrs 100 100  450  100 0 0 0>  /* K23 R */
+			, <&key_physical_attrs 100 100  550  100 0 0 0>  /* K27 T */
+			, <&key_physical_attrs 100 100  650  100 0 0 0>  /* K32 Y */
+			, <&key_physical_attrs 100 100  750  100 0 0 0>  /* K36 U */
+			, <&key_physical_attrs 100 100  850  100 0 0 0>  /* K40 I */
+			, <&key_physical_attrs 100 100  950  100 0 0 0>  /* K44 O */
+			, <&key_physical_attrs 100 100 1050  100 0 0 0>  /* K49 P */
+			, <&key_physical_attrs 100 100 1150  100 0 0 0>  /* K54 Å */
+			, <&key_physical_attrs 100 100 1250  100 0 0 0>  /* K57 ¨ / ^ */
+			, <&key_physical_attrs 100 100 1500  100 0 0 0>  /* K66 INS */
+			, <&key_physical_attrs 175 100    0  200 0 0 0>  /* K3 CAPS */
+			, <&key_physical_attrs 100 100  175  200 0 0 0>  /* K11 A */
+			, <&key_physical_attrs 100 100  275  200 0 0 0>  /* K15 S */
+			, <&key_physical_attrs 100 100  375  200 0 0 0>  /* K20 D */
+			, <&key_physical_attrs 100 100  475  200 0 0 0>  /* K24 F */
+			, <&key_physical_attrs 100 100  575  200 0 0 0>  /* K28 G */
+			, <&key_physical_attrs 100 100  675  200 0 0 0>  /* K33 H */
+			, <&key_physical_attrs 100 100  775  200 0 0 0>  /* K37 J */
+			, <&key_physical_attrs 100 100  875  200 0 0 0>  /* K41 K */
+			, <&key_physical_attrs 100 100  975  200 0 0 0>  /* K45 L */
+			, <&key_physical_attrs 100 100 1075  200 0 0 0>  /* K50 Ö */
+			, <&key_physical_attrs 100 100 1175  200 0 0 0>  /* K55 Ä */
+			, <&key_physical_attrs 100 100 1275  200 0 0 0>  /* K58 ' / * */
+			, <&key_physical_attrs 125 200 1375  100 0 0 0>  /* K62 ENTER (ISO, approximated as rectangle) */
+			, <&key_physical_attrs 100 100 1500  200 0 0 0>  /* K67 HOME */
+			, <&key_physical_attrs 125 100    0  300 0 0 0>  /* K4 L_SHIFT */
+			, <&key_physical_attrs 100 100  125  300 0 0 0>  /* K7 < > */
+			, <&key_physical_attrs 100 100  225  300 0 0 0>  /* K12 Z */
+			, <&key_physical_attrs 100 100  325  300 0 0 0>  /* K16 X */
+			, <&key_physical_attrs 100 100  425  300 0 0 0>  /* K21 C */
+			, <&key_physical_attrs 100 100  525  300 0 0 0>  /* K25 V */
+			, <&key_physical_attrs 100 100  625  300 0 0 0>  /* K29 B */
+			, <&key_physical_attrs 100 100  725  300 0 0 0>  /* K34 N */
+			, <&key_physical_attrs 100 100  825  300 0 0 0>  /* K38 M */
+			, <&key_physical_attrs 100 100  925  300 0 0 0>  /* K42 , (KOMMA) */
+			, <&key_physical_attrs 100 100 1025  300 0 0 0>  /* K46 . (PUNKT) */
+			, <&key_physical_attrs 100 100 1125  300 0 0 0>  /* K51 - (STRECK) */
+			, <&key_physical_attrs 175 100 1225  300 0 0 0>  /* K59 R_SHIFT */
+			, <&key_physical_attrs 100 100 1400  300 0 0 0>  /* K63 UP */
+			, <&key_physical_attrs 100 100 1500  300 0 0 0>  /* K68 END */
+			, <&key_physical_attrs 125 100    0  400 0 0 0>  /* K5 L_CTRL */
+			, <&key_physical_attrs 125 100  125  400 0 0 0>  /* K8 WIN_OS */
+			, <&key_physical_attrs 125 100  250  400 0 0 0>  /* K17 L_ALT */
+			, <&key_physical_attrs 625 100  375  400 0 0 0>  /* K30 SPACE */
+			, <&key_physical_attrs 100 100 1000  400 0 0 0>  /* K47 R_ALT */
+			, <&key_physical_attrs 100 100 1100  400 0 0 0>  /* K52 FN */
+			, <&key_physical_attrs 100 100 1200  400 0 0 0>  /* K56 R_CTRL */
+			, <&key_physical_attrs 100 100 1300  400 0 0 0>  /* K60 LEFT */
+			, <&key_physical_attrs 100 100 1400  400 0 0 0>  /* K64 DOWN */
+			, <&key_physical_attrs 100 100 1500  400 0 0 0>  /* K69 RIGHT */
+			;
+	};
+};
